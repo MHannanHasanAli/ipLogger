@@ -1,0 +1,82 @@
+﻿@model ipLogger.Entities.ip
+<style>
+    body {
+        color: white;
+        background-image: linear-gradient(to right, #8e2de2, #4a00e0);
+    }
+
+    #maintitle {
+        text-align:center;
+        margin-top: 40px;
+        font-size: 48px;
+    }
+
+    #navbarBTN{
+        margin-right: 40px;
+    }
+    #clientip{
+        margin-top:5%
+    }
+
+    #ipAddressHeading{
+        font-size: 60px;
+    }
+    #paragraph{
+        color: white;
+        font-size: 20px;
+    }
+</style>
+
+
+
+<body>
+    <div class="text-center">
+        <h1 id="maintitle">Welcome User</h1>
+        <div id="paragraph" class="text-center">
+            <p>
+                Welcome to our website! We offer a service that allows you to find your IP address effortlessly.
+                Knowing your IP address can be beneficial for various reasons, such as troubleshooting network
+                connectivity issues, configuring network settings, or identifying your approximate location.
+            </p>
+        </div>
+    </div>
+    <div class="text-center">
+        <button id="navbarBTN" type="button" class="btn btn-primary" onclick="showgroup();">
+            <span class="badge badge-light">Find My IP</span>
+        </button>
+    </div>
+
+
+   
+    <div class="text-center" id="clientip">
+        <h6>Your IP Address is</h6>
+        <h1 id="ipAddressHeading"></h1>
+    </div>
+
+
+    <script>
+
+        $(document).ready(function () {
+            hidegroup();
+            $.getJSON('https://api.ipify.org?format=json', function (data) {
+                var ipAddress = data.ip;
+                sendIpAddress(ipAddress);
+                $('#ipAddressHeading').text(ipAddress);
+            });
+        });
+        function hidegroup(){
+            $('#clientip').hide();
+        }
+        function showgroup() {
+            $('#clientip').show();
+        }
+        function sendIpAddress(ipAddress) {
+            $.ajax({
+                url: '/Home/SaveIpAddress',
+                type: 'POST',
+                data: { ipAddress: ipAddress },
+                
+            });
+        }
+    </script>
+</body>
